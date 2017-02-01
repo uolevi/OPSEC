@@ -2,21 +2,22 @@
 #!/usr/bin/python
 
 """
-A Python script to change user's password to an unknown random one.
+A Python script to change user's password to an unknown random one,
+usable for example for previent.
 
 You may use it in virtual machines basically to force you to go back to
 a safe and clean snapshot (because after running it you do not know your
 password to install anything, for example). In such a case, of course
 remember to take that clean and safe snapshot before running it...
 
-Remember also to turn off screen saver before leaving the screen.
+You may want to turn off screen saver before leaving the screen.
 
 If the machine gets compromised, there is no change to access the real
 passwords you are using (in the clean snapshot).
 
 Currently salted SHA512 is used to hide the generated random temporary 
-password. Why? Just for fun. Even if an attack via lookup tables is not
-an issue here, script uses 16 bytes long salt, just for fun.
+password. Even if an attack via lookup tables is not an issue here, 
+the script uses 16 bytes long salt.
 
 Thanks to:
     * http://stackoverflow.com/questions/4749083/is-there-a-way-to-script-in-python-to-change-user-passwords-in-linux-if-so-how/9227779
@@ -51,11 +52,9 @@ def generate_temp_password(length):
     return "".join(CHARS[ord(c) % len(CHARS)] for c in os.urandom(length))
 
 password = generate_temp_password(PASSWORDLENGTH)
-print password
+# print password here if you are going to need it (or for debugging)
 salt = ''.join(random.choice(SALTCHARS) for i in range(16))
-print salt
 shadow_password = crypt.crypt(password, '$6$'+salt+'$')
-print shadow_password
 
 # Just for additional obfuscation
 password = generate_temp_password(PASSWORDLENGTH)
